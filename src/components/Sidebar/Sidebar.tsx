@@ -52,19 +52,6 @@ const Sidebar = () => {
 
 	const { isOpen, setIsOpen } = useModalIsOpen();
 
-	useEffect(() => {
-		// Get surahs list form local storage and insert it to redux state
-		const surahsListFromLS = localStorage.getItem("surahsList");
-
-		if (surahsListFromLS != null) {
-			dispatch(updateSurahsList(JSON.parse(surahsListFromLS)));
-		} else {
-		}
-
-		setAyahOfTheDayFunc();
-		dispatch(setScheduleFromLS());
-	}, [dispatch, setAyahOfTheDayFunc]);
-
 	const randomAyahNumber = Math.floor(Math.random() * 6235);
 
 	async function fetchAyah() {
@@ -100,6 +87,19 @@ const Sidebar = () => {
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	useEffect(() => {
+		// Get surahs list form local storage and insert it to redux state
+		const surahsListFromLS = localStorage.getItem("surahsList");
+
+		if (surahsListFromLS != null) {
+			dispatch(updateSurahsList(JSON.parse(surahsListFromLS)));
+		} else {
+		}
+
+		setAyahOfTheDayFunc();
+		dispatch(setScheduleFromLS());
+	}, [dispatch, setAyahOfTheDayFunc]);
 
 	useEffect(() => {
 		const searchResults = list.filter(surah =>

@@ -93,7 +93,7 @@ const ReadCom = () => {
   };
 
   loadSurah();
-}, [surahNumber, setLastAyah]);
+}, [surahNumber]);
 
 	useEffect(() => {
 		const lastAyahFromLS = localStorage.getItem("lastAyah");

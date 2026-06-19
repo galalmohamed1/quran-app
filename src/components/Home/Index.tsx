@@ -38,28 +38,24 @@ const Home = () => {
 	}, [surahsList]);
 
 	const handleSelectedSortOption = useCallback(() => {
-		if (sortBtnActive == "Number") {
+		if (sortBtnActive === "Number") {
 			setSurahsListToShow(surahsListOriginal);
-		} else if (sortBtnActive == "Alphabet") {
-			setSurahsListToShow(() => {
-				let sorted: SurahType[] = Object.assign([], surahsListOriginal);
-
-				sorted.sort((a, b) => a.englishName.localeCompare(b.englishName));
-
-				return sorted;
-			});
+		} else if (sortBtnActive === "Alphabet") {
+			const sorted: SurahType[] = [...surahsListOriginal].sort((a, b) =>
+				a.englishName.localeCompare(b.englishName)
+			);
+			setSurahsListToShow(sorted);
 		} else {
 			setSurahsListToShow(surahsList);
 		}
 
 		setTimeout(() => {
-			if (surahsListToShow.length) {
-				setIsLoading(false);
-			} else {
-				setIsLoading(true);
-			}
+			setSurahsListToShow(prev => {
+				setIsLoading(prev.length === 0);
+				return prev;
+			});
 		}, 1000);
-	}, [sortBtnActive]);
+	}, [sortBtnActive, surahsListOriginal, surahsList]);
 
 	useEffect(() => {
 		handleSelectedSortOption();

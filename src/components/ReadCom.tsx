@@ -93,7 +93,7 @@ const ReadCom = () => {
   };
 
   loadSurah();
-}, [surahNumber]);
+}, [surahNumber, setLastAyah]);
 
 	useEffect(() => {
 		const lastAyahFromLS = localStorage.getItem("lastAyah");
@@ -138,9 +138,9 @@ const ReadCom = () => {
 				);
 			}
 		}
-	}, [currentAyah]);
+	}, [currentAyah, surah?.number, surahNumber]);
 
-	const setLastAyah = () => {
+	const setLastAyah = React.useCallback(() => {
 		const lastAyahFromLS = localStorage.getItem("lastAyah");
 
 		if (lastAyahFromLS != null) {
@@ -153,7 +153,7 @@ const ReadCom = () => {
 				}
 			});
 		}
-	};
+	}, [surahNumber]);
 
 	const checkIfSurahInTheList = useCallback((): boolean => {
 		let isDuplicated = false;

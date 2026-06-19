@@ -3,6 +3,14 @@ import "./globals.scss";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Providers } from "@/components/Provider";
 import Alert from "@/components/UI/Alert";
+import { Amiri_Quran } from "next/font/google";
+
+const amiriQuran = Amiri_Quran({
+  weight: "400",
+  subsets: ["arabic"],
+  display: "swap",
+  variable: "--font-amiri-quran",
+});
 
 export const metadata = {
   title: "Quran App",
@@ -22,16 +30,6 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap"
-          rel="stylesheet"
-        />
 
         <script
           dangerouslySetInnerHTML={{
@@ -52,7 +50,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body>
+      <body className={amiriQuran.variable}>
         <section className="bg-white dark:bg-slate-900 transition-colors duration-200">
           <Navbar />
         </section>

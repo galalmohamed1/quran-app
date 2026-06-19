@@ -4,7 +4,7 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { BsArrowRightShort, BsCheckAll } from "react-icons/bs";
 import { BiCheckbox, BiTimeFive } from "react-icons/bi";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "../UI/Button";
 import Card from "../UI/Card";
 import Input from "../UI/Input";
@@ -63,7 +63,7 @@ const Sidebar = () => {
 
 		setAyahOfTheDayFunc();
 		dispatch(setScheduleFromLS());
-	}, []);
+	}, [dispatch, setAyahOfTheDayFunc]);
 
 	const randomAyahNumber = Math.floor(Math.random() * 6235);
 
@@ -78,7 +78,7 @@ const Sidebar = () => {
 		}
 	}
 
-	const setAyahOfTheDayFunc = () => {
+	const setAyahOfTheDayFunc = useCallback(() => {
 		const today = new Date().getUTCDate();
 
 		const dayFromLS = localStorage.getItem("theDay");
@@ -98,14 +98,15 @@ const Sidebar = () => {
 		} else {
 			fetchAyah();
 		}
-	};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		const searchResults = list.filter(surah =>
 			surah.englishName.toLowerCase().includes(searchListValue.toLowerCase())
 		);
 		setListToShow(searchResults);
-	}, [searchListValue]);
+	}, [searchListValue, list]);
 
 	useEffect(() => {
 		if (list) {

@@ -44,6 +44,15 @@ const ReadCom = () => {
 	const [selectedServer, setSelectedServer] = useState<string>("");
 	const state = useAppSelector(state => state.listSlice);
 	const dispatch = useAppDispatch();
+	function pauseOtherAudios(currentAudio: HTMLAudioElement) {
+  const allAudios = document.querySelectorAll("audio");
+
+  allAudios.forEach((audio) => {
+    if (audio !== currentAudio) {
+      audio.pause();
+    }
+  });
+}
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -329,10 +338,12 @@ const ReadCom = () => {
 											آيَة {currentAyahNumber}
 										</h3>
 										<audio
+											  
 											className="w-full h-full min-h-[45px]"
 											src={`${currentAyah?.audio}`}
 											controls
-									/>
+											onPlay={(e) => pauseOtherAudios(e.currentTarget)}
+										/>
 									<Button
 										text=""
 										icon={
@@ -373,6 +384,7 @@ const ReadCom = () => {
 											className="w-full h-full min-h-[45px]"
 											src={getSurahAudioUrl(selectedServer, surahNumber)}
 											controls
+											onPlay={(e) => pauseOtherAudios(e.currentTarget)}
 										/>
 									)}
 								</div>

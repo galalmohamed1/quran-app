@@ -332,7 +332,7 @@ const ReadCom = () => {
 										/>
 									</Link>
 								</div>
-								<div className="flex flex-col gap-3 w-full">
+								 <div className="w-full flex flex-col sm:flex-row sm:items-center gap-2">
 									<div className="w-full h-[45px] flex items-center gap-2">
 										<h3 className="text-xl font-semibold text-end">
 											آيَة {currentAyahNumber}
@@ -360,34 +360,35 @@ const ReadCom = () => {
 												: handleAddToList(surah)
 										}
 									/>
-								</div>
-								<div className="w-full flex items-center gap-2 overflow-x-auto">
+								    </div>
+								<div className="w-full flex flex-col sm:flex-row sm:items-center gap-2">
 									<select
-										className="w-fit p-2 rounded-lg border border-gray-300 dark:bg-slate-800 dark:text-white"
+										className="w-full sm:w-fit max-w-full p-2 rounded-lg border border-gray-300 dark:bg-slate-800 dark:text-white"
 										value={selectedServer}
 										onChange={(e) => setSelectedServer(e.target.value)}
-										>
+									>
 										{reciters.map((reciter) =>
-											reciter.moshaf.map((moshaf) => (
+										reciter.moshaf.map((moshaf) => (
 											<option
-												key={`${reciter.id}-${moshaf.id}`}
-												value={moshaf.server}
+											key={`${reciter.id}-${moshaf.id}`}
+											value={moshaf.server}
 											>
-												{reciter.name} - {moshaf.name}
+											{reciter.name} - {moshaf.name}
 											</option>
-											))
+										))
 										)}
 									</select>
+
 									{selectedServer && (
 										<audio
-											key={`${selectedServer}-${surahNumber}`}
-											className="w-full h-full min-h-[45px]"
-											src={getSurahAudioUrl(selectedServer, surahNumber)}
-											controls
-											onPlay={(e) => pauseOtherAudios(e.currentTarget)}
+										key={`${selectedServer}-${surahNumber}`}
+										className="w-full sm:flex-1 min-h-[45px]"
+										src={getSurahAudioUrl(selectedServer, surahNumber)}
+										controls
+										onPlay={(e) => pauseOtherAudios(e.currentTarget)}
 										/>
 									)}
-								</div>
+									</div>
 								</div>
 							</div>
 						</div>

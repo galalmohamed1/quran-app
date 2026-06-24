@@ -14,9 +14,9 @@ import { fetchSurahList } from "@/api/home.services";
 
 const Home = () => {
 	const [searchValue, setSearchValue] = useState<string>("");
-	const [sortBtnActive, setSortBtnActive] = useState("Number");
-	const [surahsListOriginal, setSurahsListOriginal] = useState<SurahType[]>([]);
 	const [surahsListToShow, setSurahsListToShow] = useState<SurahType[]>([]);
+	// const [sortBtnActive, setSortBtnActive] = useState("Number");
+	// const [surahsListOriginal, setSurahsListOriginal] = useState<SurahType[]>([]);
 	const [searchResults, setSearchResults] = useState<SurahType[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -27,7 +27,7 @@ const Home = () => {
 			const surahs = await fetchSurahList();
 
 			setSurahsListToShow(surahs);
-			setSurahsListOriginal(surahs);
+			// setSurahsListOriginal(surahs);
 		};
 
 		loadSurahList();
@@ -37,29 +37,29 @@ const Home = () => {
 		localStorage.setItem("surahsList", JSON.stringify(surahsList));
 	}, [surahsList]);
 
-	const handleSelectedSortOption = useCallback(() => {
-		if (sortBtnActive === "Number") {
-			setSurahsListToShow(surahsListOriginal);
-		} else if (sortBtnActive === "Alphabet") {
-			const sorted: SurahType[] = [...surahsListOriginal].sort((a, b) =>
-				a.englishName.localeCompare(b.englishName)
-			);
-			setSurahsListToShow(sorted);
-		} else {
-			setSurahsListToShow(surahsList);
-		}
+	// const handleSelectedSortOption = useCallback(() => {
+	// 	if (sortBtnActive === "Number") {
+	// 		setSurahsListToShow(surahsListOriginal);
+	// 	} else if (sortBtnActive === "Alphabet") {
+	// 		const sorted: SurahType[] = [...surahsListOriginal].sort((a, b) =>
+	// 			a.englishName.localeCompare(b.englishName)
+	// 		);
+	// 		setSurahsListToShow(sorted);
+	// 	} else {
+	// 		setSurahsListToShow(surahsList);
+	// 	}
 
-		setTimeout(() => {
-			setSurahsListToShow(prev => {
-				setIsLoading(prev.length === 0);
-				return prev;
-			});
-		}, 1000);
-	}, [sortBtnActive, surahsListOriginal, surahsList]);
+	// 	setTimeout(() => {
+	// 		setSurahsListToShow(prev => {
+	// 			setIsLoading(prev.length === 0);
+	// 			return prev;
+	// 		});
+	// 	}, 1000);
+	// }, [sortBtnActive, surahsListOriginal, surahsList]);
 
-	useEffect(() => {
-		handleSelectedSortOption();
-	}, [handleSelectedSortOption]);
+	// useEffect(() => {
+	// 	handleSelectedSortOption();
+	// }, [handleSelectedSortOption]);
 
 	useEffect(() => {
 		const query = searchValue.trim().toLowerCase();
@@ -85,18 +85,8 @@ const Home = () => {
 	};
 
 	return (
-		<div className="w-full h-full bg-slate-50 dark:bg-slate-900/50 lg:m-0 rounded-md lg:rounded-lg lg:mt-0 px-4 transition-colors duration-200">
-			<div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center mr-3">
-				<div className="flex gap-3 my-3">
-					{["Number", "Alphabet", "In List"].map((sortBtn, index) => (
-						<SortButton
-							onclick={() => setSortBtnActive(sortBtn)}
-							key={index}
-							text={sortBtn}
-							active={sortBtnActive == sortBtn ? true : false}
-						/>
-					))}
-				</div>
+		<div className="w-full h-full bg-slate-50 dark:bg-slate-900/50 lg:m-0 rounded-md lg:rounded-lg lg:mt-0 px-4 py-2 transition-colors duration-200">
+			<div className="flex flex-col-reverse sm:flex-row justify-between items-center sm:items-center mr-3 mb-4 ">
 				<div className="w-full sm:w-[250px] md:w-[300px] xl:w-[500px] mt-3 sm:mt-0">
 					<Input
 						type="text"

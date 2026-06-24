@@ -11,6 +11,7 @@ import React, {
 	useState,
 } from "react";
 import { AyahType, SurahType } from "@/types/type";
+import { ReciterType } from "@/types/reciters";
 import Image from "next/image";
 import quranImage from "../../public/Quran.png";
 import bismillahImage from "../../public/bismillah.png";
@@ -25,7 +26,7 @@ import {
 	updateSurahsListLS,
 } from "@/app/rtk/slices/listSlice";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { fetchSurah } from "@/api/home.services";
+import { fetchSurah, getSurahAudioUrl, fetchReciters } from "@/api/home.services";
 
 const ReadCom = () => {
 	const pathname = usePathname();
@@ -38,7 +39,9 @@ const ReadCom = () => {
 	let surahTextContainerRef = useRef<HTMLDivElement | null>(null);
 
 	const [isSurahInList, setIsSurahInList] = useState<boolean | null>(null);
-
+	const [reciters, setReciters] = useState<ReciterType[]>([]);
+	const [selectedReciter, setSelectedReciter] = useState<ReciterType | null>(null);
+	const [selectedServer, setSelectedServer] = useState<string>("");
 	const state = useAppSelector(state => state.listSlice);
 	const dispatch = useAppDispatch();
 
@@ -139,6 +142,22 @@ const ReadCom = () => {
 			}
 		}
 	}, [currentAyah, surah?.number, surahNumber]);
+
+	useEffect(() => {
+		const loadReciters = async () => {
+			const data = await fetchReciters();
+
+			setReciters(data);
+
+			const firstServer = data[0]?.moshaf?.[0]?.server;
+
+			if (firstServer) {
+			setSelectedServer(firstServer);
+			}
+		};
+
+		loadReciters();
+	}, []);
 
 	const setLastAyah = React.useCallback(() => {
 		const lastAyahFromLS = localStorage.getItem("lastAyah");
@@ -304,13 +323,16 @@ const ReadCom = () => {
 										/>
 									</Link>
 								</div>
-								<div className="w-full h-[45px] flex items-center gap-2">
-									<audio
-										className="w-full h-full min-h-[45px]"
-										src={`${currentAyah?.audio}`}
-										controls
+								<div className="flex flex-col gap-3 w-full">
+									<div className="w-full h-[45px] flex items-center gap-2">
+										<h3 className="text-xl font-semibold text-end">
+											آيَة {currentAyahNumber}
+										</h3>
+										<audio
+											className="w-full h-full min-h-[45px]"
+											src={`${currentAyah?.audio}`}
+											controls
 									/>
-
 									<Button
 										text=""
 										icon={
@@ -327,6 +349,33 @@ const ReadCom = () => {
 												: handleAddToList(surah)
 										}
 									/>
+								</div>
+								<div className="w-full flex items-center gap-2 overflow-x-auto">
+									<select
+										className="w-fit p-2 rounded-lg border border-gray-300 dark:bg-slate-800 dark:text-white"
+										value={selectedServer}
+										onChange={(e) => setSelectedServer(e.target.value)}
+										>
+										{reciters.map((reciter) =>
+											reciter.moshaf.map((moshaf) => (
+											<option
+												key={`${reciter.id}-${moshaf.id}`}
+												value={moshaf.server}
+											>
+												{reciter.name} - {moshaf.name}
+											</option>
+											))
+										)}
+									</select>
+									{selectedServer && (
+										<audio
+											key={`${selectedServer}-${surahNumber}`}
+											className="w-full h-full min-h-[45px]"
+											src={getSurahAudioUrl(selectedServer, surahNumber)}
+											controls
+										/>
+									)}
+								</div>
 								</div>
 							</div>
 						</div>
